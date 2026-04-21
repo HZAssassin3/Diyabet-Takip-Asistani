@@ -1,6 +1,7 @@
 package com.example.insulinneedlereminder.ui.settings
 
 import android.app.TimePickerDialog
+import androidx.appcompat.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,6 +41,7 @@ class SettingsFragment : Fragment() {
     private var noonMinute = 0
     private var eveningHour = 19
     private var eveningMinute = 0
+    private var replaceExistingOnImport = true
 
     private val createBackupLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
@@ -51,7 +53,7 @@ class SettingsFragment : Fragment() {
     private val importBackupLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             if (uri != null) {
-                importBackupFromUri(uri)
+                importBackupFromUri(uri, replaceExistingOnImport)
             }
         }
 
@@ -144,8 +146,24 @@ class SettingsFragment : Fragment() {
             createBackupLauncher.launch("insulin_backup_$stamp.json")
         }
         binding.btnImportBackup.setOnClickListener {
-            importBackupLauncher.launch(arrayOf("application/json", "text/plain"))
+            showImportModeDialog()
         }
+    }
+
+    private fun showImportModeDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Yedek geri yukleme")
+            .setMessage("Yukleme turunu secin")
+            .setPositiveButton("Sil ve yukle") { _, _ ->
+                replaceExistingOnImport = true
+                importBackupLauncher.launch(arrayOf("application/json", "text/plain"))
+            }
+            .setNegativeButton("Ustune ekle") { _, _ ->
+                replaceExistingOnImport = false
+                importBackupLauncher.launch(arrayOf("application/json", "text/plain"))
+            }
+            .setNeutralButton("Iptal", null)
+            .show()
     }
 
     private fun saveSettings() {
@@ -241,7 +259,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun importBackupFromUri(uri: Uri) {
+    private fun importBackupFromUri(uri: Uri, replaceExisting: Boolean) {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val resolver = context?.contentResolver ?: return@launch
@@ -252,8 +270,10 @@ class SettingsFragment : Fragment() {
                 val glucose = json.optJSONArray("glucoseRecords").toGlucoseRecords()
 
                 db.withTransaction {
-                    db.insulinDao().clearAll()
-                    db.glucoseDao().clearAll()
+                    if (replaceExisting) {
+                        db.insulinDao().clearAll()
+                        db.glucoseDao().clearAll()
+                    }
                     if (insulin.isNotEmpty()) db.insulinDao().insertAll(insulin)
                     if (glucose.isNotEmpty()) db.glucoseDao().insertAll(glucose)
                 }
@@ -261,7 +281,9 @@ class SettingsFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
-                        "Yedek yuklendi (${insulin.size + glucose.size} kayit)",
+                        "Yedek yuklendi (${insulin.size + glucose.size} kayit, ${
+                            if (replaceExisting) "silip yukleme" else "ustune ekleme"
+                        })",
                         Toast.LENGTH_LONG
                     ).show()
                 }
