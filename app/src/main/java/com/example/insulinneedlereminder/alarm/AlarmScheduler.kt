@@ -83,6 +83,74 @@ object AlarmScheduler {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         alarmManager.cancel(pendingIntent)
+        cancelFollowUp(context, requestCode)
+        cancelSnooze(context, requestCode)
+    }
+
+    fun scheduleFollowUp(
+        context: Context,
+        label: String,
+        units: Int,
+        requestCode: Int,
+        repeatCount: Int = 1,
+        delayMinutes: Int = 15
+    ) {
+        val triggerAt = System.currentTimeMillis() + delayMinutes * 60_000L
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra(AlarmReceiver.EXTRA_LABEL, label)
+            putExtra(AlarmReceiver.EXTRA_UNITS, units)
+            putExtra(AlarmReceiver.EXTRA_REQUEST_CODE, requestCode)
+            putExtra(AlarmReceiver.EXTRA_IS_FOLLOW_UP, true)
+            putExtra(AlarmReceiver.EXTRA_REPEAT_COUNT, repeatCount)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, followUpRequestCode(requestCode), intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        scheduleExactOrBestEffort(alarmManager, triggerAt, pendingIntent)
+    }
+
+    fun cancelFollowUp(context: Context, requestCode: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, followUpRequestCode(requestCode), intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+    }
+
+    fun scheduleSnooze(
+        context: Context,
+        label: String,
+        units: Int,
+        requestCode: Int,
+        delayMinutes: Int = 10
+    ) {
+        val triggerAt = System.currentTimeMillis() + delayMinutes * 60_000L
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra(AlarmReceiver.EXTRA_LABEL, label)
+            putExtra(AlarmReceiver.EXTRA_UNITS, units)
+            putExtra(AlarmReceiver.EXTRA_REQUEST_CODE, requestCode)
+            putExtra(AlarmReceiver.EXTRA_IS_SNOOZE, true)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, snoozeRequestCode(requestCode), intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        scheduleExactOrBestEffort(alarmManager, triggerAt, pendingIntent)
+    }
+
+    fun cancelSnooze(context: Context, requestCode: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, snoozeRequestCode(requestCode), intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
     }
 
     object RequestCode {
@@ -118,4 +186,7 @@ object AlarmScheduler {
             pendingIntent
         )
     }
+
+    private fun followUpRequestCode(requestCode: Int): Int = requestCode + 9000
+    private fun snoozeRequestCode(requestCode: Int): Int = requestCode + 8000
 }
