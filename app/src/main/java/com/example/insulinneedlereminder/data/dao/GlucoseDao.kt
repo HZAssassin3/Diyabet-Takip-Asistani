@@ -22,9 +22,18 @@ interface GlucoseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(record: GlucoseRecord)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(records: List<GlucoseRecord>)
+
     @Delete
     suspend fun delete(record: GlucoseRecord)
 
     @Query("SELECT * FROM glucose_records ORDER BY id DESC LIMIT 3")
     suspend fun getLastThreeDirect(): List<GlucoseRecord>
+
+    @Query("SELECT * FROM glucose_records ORDER BY date DESC")
+    suspend fun getAllDirect(): List<GlucoseRecord>
+
+    @Query("DELETE FROM glucose_records")
+    suspend fun clearAll()
 }

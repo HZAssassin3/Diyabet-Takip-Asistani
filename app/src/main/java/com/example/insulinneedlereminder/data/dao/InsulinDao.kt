@@ -19,9 +19,18 @@ interface InsulinDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(record: InsulinRecord)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(records: List<InsulinRecord>)
+
     @Update
     suspend fun update(record: InsulinRecord)
 
     @Delete
     suspend fun delete(record: InsulinRecord)
+
+    @Query("SELECT * FROM insulin_records ORDER BY date DESC")
+    suspend fun getAllDirect(): List<InsulinRecord>
+
+    @Query("DELETE FROM insulin_records")
+    suspend fun clearAll()
 }

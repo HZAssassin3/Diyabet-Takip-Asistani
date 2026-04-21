@@ -1,15 +1,30 @@
 package com.example.insulinneedlereminder.ui.settings
 
 import android.app.TimePickerDialog
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.room.withTransaction
 import com.example.insulinneedlereminder.alarm.AlarmScheduler
+import com.example.insulinneedlereminder.data.db.AppDatabase
+import com.example.insulinneedlereminder.data.entity.GlucoseRecord
+import com.example.insulinneedlereminder.data.entity.InsulinRecord
 import com.example.insulinneedlereminder.databinding.FragmentSettingsBinding
 import com.example.insulinneedlereminder.util.PrefsManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class SettingsFragment : Fragment() {
 
@@ -17,6 +32,7 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var prefs: PrefsManager
+    private lateinit var db: AppDatabase
 
     private var morningHour = 8
     private var morningMinute = 0
@@ -24,6 +40,20 @@ class SettingsFragment : Fragment() {
     private var noonMinute = 0
     private var eveningHour = 19
     private var eveningMinute = 0
+
+    private val createBackupLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            if (uri != null) {
+                exportBackupToUri(uri)
+            }
+        }
+
+    private val importBackupLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            if (uri != null) {
+                importBackupFromUri(uri)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,10 +66,12 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         prefs = PrefsManager(requireContext())
+        db = AppDatabase.getInstance(requireContext())
         setupToolbar()
         loadSettings()
         setupTimePickers()
         setupSaveButton()
+        setupBackupButtons()
     }
 
     private fun setupToolbar() {
@@ -106,6 +138,16 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun setupBackupButtons() {
+        binding.btnExportBackup.setOnClickListener {
+            val stamp = SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(Date())
+            createBackupLauncher.launch("insulin_backup_$stamp.json")
+        }
+        binding.btnImportBackup.setOnClickListener {
+            importBackupLauncher.launch(arrayOf("application/json", "text/plain"))
+        }
+    }
+
     private fun saveSettings() {
         // Sabah
         prefs.morningEnabled = binding.switchMorning.isChecked
@@ -162,6 +204,144 @@ class SettingsFragment : Fragment() {
 
     private fun formatTime(hour: Int, minute: Int): String =
         String.format("%02d:%02d", hour, minute)
+
+    private fun exportBackupToUri(uri: Uri) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val insulin = db.insulinDao().getAllDirect()
+                val glucose = db.glucoseDao().getAllDirect()
+                val payload = JSONObject().apply {
+                    put("version", 1)
+                    put("exportedAt", System.currentTimeMillis())
+                    put("insulinRecords", insulin.toInsulinJsonArray())
+                    put("glucoseRecords", glucose.toGlucoseJsonArray())
+                }.toString()
+
+                val resolver = context?.contentResolver ?: return@launch
+                resolver.openOutputStream(uri)?.use { output ->
+                    output.write(payload.toByteArray(Charsets.UTF_8))
+                } ?: throw IllegalStateException("Dosya yazilamadi")
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Yedek olusturuldu (${insulin.size + glucose.size} kayit)",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Yedek alinirken hata: ${e.localizedMessage}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun importBackupFromUri(uri: Uri) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val resolver = context?.contentResolver ?: return@launch
+                val raw = resolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+                    ?: throw IllegalStateException("Dosya okunamadi")
+                val json = JSONObject(raw)
+                val insulin = json.optJSONArray("insulinRecords").toInsulinRecords()
+                val glucose = json.optJSONArray("glucoseRecords").toGlucoseRecords()
+
+                db.withTransaction {
+                    db.insulinDao().clearAll()
+                    db.glucoseDao().clearAll()
+                    if (insulin.isNotEmpty()) db.insulinDao().insertAll(insulin)
+                    if (glucose.isNotEmpty()) db.glucoseDao().insertAll(glucose)
+                }
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Yedek yuklendi (${insulin.size + glucose.size} kayit)",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Yedek yuklenirken hata: ${e.localizedMessage}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun List<InsulinRecord>.toInsulinJsonArray(): JSONArray = JSONArray().apply {
+        forEach { record ->
+            put(
+                JSONObject().apply {
+                    put("id", record.id)
+                    put("date", record.date)
+                    put("timeLabel", record.timeLabel)
+                    put("units", record.units)
+                    put("isDone", record.isDone)
+                    put("note", record.note)
+                }
+            )
+        }
+    }
+
+    private fun List<GlucoseRecord>.toGlucoseJsonArray(): JSONArray = JSONArray().apply {
+        forEach { record ->
+            put(
+                JSONObject().apply {
+                    put("id", record.id)
+                    put("date", record.date)
+                    put("value", record.value)
+                    put("mealStatus", record.mealStatus)
+                    put("note", record.note)
+                }
+            )
+        }
+    }
+
+    private fun JSONArray?.toInsulinRecords(): List<InsulinRecord> {
+        if (this == null) return emptyList()
+        val list = mutableListOf<InsulinRecord>()
+        for (i in 0 until length()) {
+            val item = optJSONObject(i) ?: continue
+            list.add(
+                InsulinRecord(
+                    id = item.optInt("id", 0),
+                    date = item.optLong("date", System.currentTimeMillis()),
+                    timeLabel = item.optString("timeLabel", "Sabah"),
+                    units = item.optInt("units", 0),
+                    isDone = item.optBoolean("isDone", false),
+                    note = item.optString("note", "")
+                )
+            )
+        }
+        return list
+    }
+
+    private fun JSONArray?.toGlucoseRecords(): List<GlucoseRecord> {
+        if (this == null) return emptyList()
+        val list = mutableListOf<GlucoseRecord>()
+        for (i in 0 until length()) {
+            val item = optJSONObject(i) ?: continue
+            list.add(
+                GlucoseRecord(
+                    id = item.optInt("id", 0),
+                    date = item.optLong("date", System.currentTimeMillis()),
+                    value = item.optInt("value", 0),
+                    mealStatus = item.optString("mealStatus", "yemek_sonrasi"),
+                    note = item.optString("note", "")
+                )
+            )
+        }
+        return list
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
