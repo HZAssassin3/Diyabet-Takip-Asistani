@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="Ana Sayfa" />
+    <item
+        android:id="@+id/glucoseFragment"
+        android:icon="@drawable/ic_glucose"
+        android:title="Kan Şekeri" />
+    <item
+        android:id="@+id/insulinFragment"
+        android:icon="@drawable/ic_insulin"
+        android:title="İnsülin" />
+    <item
+        android:id="@+id/chartFragment"
+        android:icon="@drawable/ic_chart"
+        android:title="Grafik" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_alarm"
+        android:title="Alarmlar" />
+</menu>

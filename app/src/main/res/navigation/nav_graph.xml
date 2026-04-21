@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.insulinneedlereminder.ui.home.HomeFragment"
+        android:label="Ana Ekran"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_glucose"
+            app:destination="@id/glucoseFragment" />
+        <action
+            android:id="@+id/action_home_to_insulin"
+            app:destination="@id/insulinFragment" />
+        <action
+            android:id="@+id/action_home_to_chart"
+            app:destination="@id/chartFragment" />
+        <action
+            android:id="@+id/action_home_to_settings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/glucoseFragment"
+        android:name="com.example.insulinneedlereminder.ui.glucose.GlucoseFragment"
+        android:label="Kan Şekeri"
+        tools:layout="@layout/fragment_glucose">
+        <action
+            android:id="@+id/action_glucose_to_history"
+            app:destination="@id/historyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/insulinFragment"
+        android:name="com.example.insulinneedlereminder.ui.insulin.InsulinFragment"
+        android:label="İnsülin Kaydı"
+        tools:layout="@layout/fragment_insulin" />
+
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="com.example.insulinneedlereminder.ui.chart.ChartFragment"
+        android:label="Grafik"
+        tools:layout="@layout/fragment_chart" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.insulinneedlereminder.ui.settings.SettingsFragment"
+        android:label="Ayarlar"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.insulinneedlereminder.ui.history.HistoryFragment"
+        android:label="Geçmiş Ölçümler"
+        tools:layout="@layout/fragment_history" />
+
+</navigation>
