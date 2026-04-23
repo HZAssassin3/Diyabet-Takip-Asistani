@@ -10,9 +10,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.insulinneedlereminder.R
 import com.example.insulinneedlereminder.databinding.FragmentReportBinding
+import com.example.insulinneedlereminder.data.entity.GlucoseRecord
 import com.example.insulinneedlereminder.ui.glucose.GlucoseViewModel
 import com.example.insulinneedlereminder.ui.insulin.InsulinViewModel
 import com.example.insulinneedlereminder.util.DateUtils
+import com.example.insulinneedlereminder.util.GlucoseStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +42,19 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
                 binding.tvAvg.text = "${values.average().toInt()}"
                 binding.tvMin.text = "${values.min()}"
                 binding.tvMax.text = "${values.max()}"
+                binding.tvTotal.text = "${records.size}"
+
+                val lowCount = records.count { GlucoseStatus.from(it.value) == GlucoseStatus.LOW }
+                val normalCount = records.count { GlucoseStatus.from(it.value) == GlucoseStatus.NORMAL }
+                val highCount = records.count { GlucoseStatus.from(it.value) == GlucoseStatus.HIGH }
+                binding.tvLow.text = "$lowCount"
+                binding.tvNormal.text = "$normalCount"
+                binding.tvHigh.text = "$highCount"
+
+                binding.tvPeriod7.text = formatPeriodStats(records, 7)
+                binding.tvPeriod14.text = formatPeriodStats(records, 14)
+                binding.tvPeriod30.text = formatPeriodStats(records, 30)
+
                 binding.layoutStats.visibility = View.VISIBLE
                 binding.tvNoData.visibility = View.GONE
             } else {
@@ -47,6 +62,20 @@ class ReportFragment : Fragment(R.layout.fragment_report) {
                 binding.tvNoData.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun formatPeriodStats(records: List<GlucoseRecord>, days: Int): String {
+        val fromDate = DateUtils.daysAgo(days)
+        val scoped = records.filter { it.date >= fromDate }
+        if (scoped.isEmpty()) {
+            return "$days gun: kayit yok"
+        }
+        val avg = scoped.map { it.value }.average().toInt()
+        val low = scoped.count { GlucoseStatus.from(it.value) == GlucoseStatus.LOW }
+        val high = scoped.count { GlucoseStatus.from(it.value) == GlucoseStatus.HIGH }
+        val lowPct = (low * 100) / scoped.size
+        val highPct = (high * 100) / scoped.size
+        return "$days gun: ort $avg mg/dL • dusuk %$lowPct • yuksek %$highPct"
     }
 
     private fun setupButtons() {
