@@ -39,18 +39,10 @@ class GlucoseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         applyGlucoseThresholds()
-        setupToolbar()
         setupRecyclerView()
         observeRecords()
         setupSaveButton()
         setupViewAllButton()
-    }
-
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
     }
 
     private fun setupRecyclerView() {

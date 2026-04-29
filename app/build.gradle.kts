@@ -76,6 +76,10 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.0")
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:23.3.0")
+    // Google Play Billing
+    implementation("com.android.billingclient:billing-ktx:7.1.1")
 
     // Test
     testImplementation(libs.junit)

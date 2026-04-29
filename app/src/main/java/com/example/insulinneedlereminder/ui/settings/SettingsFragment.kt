@@ -12,7 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.withTransaction
+import com.example.insulinneedlereminder.MainActivity
 import com.example.insulinneedlereminder.alarm.AlarmScheduler
+import com.example.insulinneedlereminder.R
 import com.example.insulinneedlereminder.data.db.AppDatabase
 import com.example.insulinneedlereminder.data.entity.GlucoseRecord
 import com.example.insulinneedlereminder.data.entity.InsulinRecord
@@ -69,18 +71,11 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         prefs = PrefsManager(requireContext())
         db = AppDatabase.getInstance(requireContext())
-        setupToolbar()
         loadSettings()
         setupTimePickers()
         setupSaveButton()
         setupBackupButtons()
-    }
-
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
+        setupMonetizationSection()
     }
 
     private fun loadSettings() {
@@ -150,19 +145,51 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun setupMonetizationSection() {
+        refreshAdsStatus()
+        binding.btnRemoveAds.setOnClickListener {
+            if (prefs.adsRemoved) {
+                Toast.makeText(requireContext(), "Premium aktif, reklamlar kapalı", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
+
+            val launched = (activity as? MainActivity)?.launchRemoveAdsPurchase() == true
+            if (!launched) {
+                Toast.makeText(
+                    requireContext(),
+                    "Satın alma bilgisi hazır değil. Lütfen biraz sonra tekrar deneyin.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun refreshAdsStatus() {
+        if (prefs.adsRemoved) {
+            binding.tvAdsStatus.setText(R.string.ads_status_removed)
+            binding.btnRemoveAds.isEnabled = false
+            binding.btnRemoveAds.alpha = 0.6f
+        } else {
+            binding.tvAdsStatus.setText(R.string.ads_status_free)
+            binding.btnRemoveAds.isEnabled = true
+            binding.btnRemoveAds.alpha = 1f
+        }
+    }
+
     private fun showImportModeDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Yedek geri yukleme")
-            .setMessage("Yukleme turunu secin")
-            .setPositiveButton("Sil ve yukle") { _, _ ->
+            .setTitle("Yedek geri yükleme")
+            .setMessage("Yükleme türünü seçin")
+            .setPositiveButton("Sil ve yükle") { _, _ ->
                 replaceExistingOnImport = true
                 importBackupLauncher.launch(arrayOf("application/json", "text/plain"))
             }
-            .setNegativeButton("Ustune ekle") { _, _ ->
+            .setNegativeButton("Üstüne ekle") { _, _ ->
                 replaceExistingOnImport = false
                 importBackupLauncher.launch(arrayOf("application/json", "text/plain"))
             }
-            .setNeutralButton("Iptal", null)
+            .setNeutralButton("İptal", null)
             .show()
     }
 
@@ -238,12 +265,12 @@ class SettingsFragment : Fragment() {
                 val resolver = context?.contentResolver ?: return@launch
                 resolver.openOutputStream(uri)?.use { output ->
                     output.write(payload.toByteArray(Charsets.UTF_8))
-                } ?: throw IllegalStateException("Dosya yazilamadi")
+                } ?: throw IllegalStateException("Dosya yazılamadı")
 
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
-                        "Yedek olusturuldu (${insulin.size + glucose.size} kayit)",
+                        "Yedek oluşturuldu (${insulin.size + glucose.size} kayıt)",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -251,7 +278,7 @@ class SettingsFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
-                        "Yedek alinirken hata: ${e.localizedMessage}",
+                        "Yedek alınırken hata: ${e.localizedMessage}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -264,7 +291,7 @@ class SettingsFragment : Fragment() {
             try {
                 val resolver = context?.contentResolver ?: return@launch
                 val raw = resolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
-                    ?: throw IllegalStateException("Dosya okunamadi")
+                    ?: throw IllegalStateException("Dosya okunamadı")
                 val json = JSONObject(raw)
                 val insulin = json.optJSONArray("insulinRecords").toInsulinRecords()
                 val glucose = json.optJSONArray("glucoseRecords").toGlucoseRecords()
@@ -281,8 +308,8 @@ class SettingsFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
-                        "Yedek yuklendi (${insulin.size + glucose.size} kayit, ${
-                            if (replaceExisting) "silip yukleme" else "ustune ekleme"
+                        "Yedek yüklendi (${insulin.size + glucose.size} kayıt, ${
+                            if (replaceExisting) "silip yükleme" else "üstüne ekleme"
                         })",
                         Toast.LENGTH_LONG
                     ).show()
@@ -291,7 +318,7 @@ class SettingsFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(),
-                        "Yedek yuklenirken hata: ${e.localizedMessage}",
+                        "Yedek yüklenirken hata: ${e.localizedMessage}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -368,5 +395,12 @@ class SettingsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (_binding != null) {
+            refreshAdsStatus()
+        }
     }
 }

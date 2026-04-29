@@ -38,17 +38,9 @@ class InsulinFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
         setupRecyclerView()
         observeRecords()
         setupFab()
-    }
-
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
     }
 
     private fun setupRecyclerView() {

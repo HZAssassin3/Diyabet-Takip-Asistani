@@ -47,21 +47,26 @@ class ChartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
+        setupNoDataTexts()
         observeGlucose()
         observeInsulin()
     }
 
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
+    private fun setupNoDataTexts() {
+        binding.glucoseChart.setNoDataText("Grafik verisi bulunamadı")
+        binding.insulinChart.setNoDataText("Grafik verisi bulunamadı")
     }
 
     private fun observeGlucose() {
         glucoseViewModel.lastRecords.observe(viewLifecycleOwner) { records ->
-            if (records.isEmpty()) return@observe
+            if (records.isEmpty()) {
+                binding.glucoseChart.clear()
+                binding.glucoseChart.invalidate()
+                binding.tvAverage.text = "-"
+                binding.tvMin.text = "-"
+                binding.tvMax.text = "-"
+                return@observe
+            }
             // Grafik tamamen çizildikten sonra setup et
             binding.glucoseChart.post {
                 setupGlucoseChart(records)
@@ -72,7 +77,11 @@ class ChartFragment : Fragment() {
 
     private fun observeInsulin() {
         insulinViewModel.allRecords.observe(viewLifecycleOwner) { records ->
-            if (records.isEmpty()) return@observe
+            if (records.isEmpty()) {
+                binding.insulinChart.clear()
+                binding.insulinChart.invalidate()
+                return@observe
+            }
             binding.insulinChart.post {
                 setupInsulinChart(records)
             }
