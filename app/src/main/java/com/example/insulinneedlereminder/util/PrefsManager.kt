@@ -53,8 +53,4 @@ class PrefsManager(context: Context) {
     var glucoseHighThreshold: Int
         get() = prefs.getInt("glucose_high", 180)
         set(v) = prefs.edit().putInt("glucose_high", v).apply()
-
-    var adsRemoved: Boolean
-        get() = prefs.getBoolean("ads_removed", false)
-        set(v) = prefs.edit().putBoolean("ads_removed", v).apply()
 }

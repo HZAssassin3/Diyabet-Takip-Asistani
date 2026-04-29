@@ -12,9 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.withTransaction
-import com.example.insulinneedlereminder.MainActivity
 import com.example.insulinneedlereminder.alarm.AlarmScheduler
-import com.example.insulinneedlereminder.R
 import com.example.insulinneedlereminder.data.db.AppDatabase
 import com.example.insulinneedlereminder.data.entity.GlucoseRecord
 import com.example.insulinneedlereminder.data.entity.InsulinRecord
@@ -75,7 +73,6 @@ class SettingsFragment : Fragment() {
         setupTimePickers()
         setupSaveButton()
         setupBackupButtons()
-        setupMonetizationSection()
     }
 
     private fun loadSettings() {
@@ -142,38 +139,6 @@ class SettingsFragment : Fragment() {
         }
         binding.btnImportBackup.setOnClickListener {
             showImportModeDialog()
-        }
-    }
-
-    private fun setupMonetizationSection() {
-        refreshAdsStatus()
-        binding.btnRemoveAds.setOnClickListener {
-            if (prefs.adsRemoved) {
-                Toast.makeText(requireContext(), "Premium aktif, reklamlar kapalı", Toast.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
-            }
-
-            val launched = (activity as? MainActivity)?.launchRemoveAdsPurchase() == true
-            if (!launched) {
-                Toast.makeText(
-                    requireContext(),
-                    "Satın alma bilgisi hazır değil. Lütfen biraz sonra tekrar deneyin.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-    }
-
-    private fun refreshAdsStatus() {
-        if (prefs.adsRemoved) {
-            binding.tvAdsStatus.setText(R.string.ads_status_removed)
-            binding.btnRemoveAds.isEnabled = false
-            binding.btnRemoveAds.alpha = 0.6f
-        } else {
-            binding.tvAdsStatus.setText(R.string.ads_status_free)
-            binding.btnRemoveAds.isEnabled = true
-            binding.btnRemoveAds.alpha = 1f
         }
     }
 
@@ -397,10 +362,4 @@ class SettingsFragment : Fragment() {
         _binding = null
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (_binding != null) {
-            refreshAdsStatus()
-        }
-    }
 }

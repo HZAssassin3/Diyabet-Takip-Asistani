@@ -7,7 +7,6 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -15,17 +14,13 @@ import androidx.core.content.ContextCompat
 import android.content.pm.PackageManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.insulinneedlereminder.billing.BillingManager
 import com.example.insulinneedlereminder.databinding.ActivityMainBinding
-import com.example.insulinneedlereminder.util.PrefsManager
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var prefsManager: PrefsManager
-    private var billingManager: BillingManager? = null
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { /* Permission result handled by system UI */ }
@@ -47,50 +42,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        prefsManager = PrefsManager(this)
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
-        setupAds(navController)
-        setupBilling()
+        setupAds()
 
         // Exact alarm izni iste
         requestExactAlarmPermission()
         requestNotificationPermission()
     }
 
-    private fun setupAds(navController: androidx.navigation.NavController) {
+    private fun setupAds() {
         MobileAds.initialize(this)
         binding.adViewBanner.loadAd(AdRequest.Builder().build())
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            updateBannerVisibility(destination.id)
-        }
-        updateBannerVisibility(navController.currentDestination?.id)
-    }
-
-    private fun setupBilling() {
-        billingManager = BillingManager(this) { adsRemoved ->
-            if (adsRemoved) {
-                binding.adViewBanner.visibility = View.GONE
-            } else {
-                updateBannerVisibility(null)
-            }
-        }.also { it.startConnection() }
-    }
-
-    fun launchRemoveAdsPurchase(): Boolean {
-        return billingManager?.launchRemoveAdsPurchase(this) == true
-    }
-
-    private fun updateBannerVisibility(destinationId: Int?) {
-        if (prefsManager.adsRemoved) {
-            binding.adViewBanner.visibility = View.GONE
-            return
-        }
-        binding.adViewBanner.visibility = View.VISIBLE
     }
 
     private fun requestExactAlarmPermission() {
@@ -115,7 +81,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         binding.adViewBanner.destroy()
-        billingManager?.destroy()
         super.onDestroy()
     }
 }
