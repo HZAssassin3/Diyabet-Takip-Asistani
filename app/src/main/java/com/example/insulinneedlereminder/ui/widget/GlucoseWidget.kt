@@ -87,14 +87,13 @@ class GlucoseWidget : AppWidgetProvider() {
         }
 
         private fun calculateRecordLimit(options: android.os.Bundle): Int {
-            val maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 120)
-            return when {
-                maxHeight < 110 -> 1
-                maxHeight < 170 -> 2
-                maxHeight < 230 -> 3
-                maxHeight < 300 -> 4
-                else -> 5
-            }
+            val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 110)
+            val widthDp = minWidth
+            // Kural:
+            // - 2x1 ve 2x2 => Son 3 Ölçüm
+            // - 3x1 ve 3x2 => Son 5 Ölçüm
+            // Launcher'larda 3 kolon için minWidth genelde 210dp+ olur.
+            return if (widthDp >= 210) 5 else 3
         }
 
         fun sendRefreshBroadcast(context: Context) {
