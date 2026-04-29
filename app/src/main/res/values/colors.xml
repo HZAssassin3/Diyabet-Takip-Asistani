@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ana renkler -->
+    <color name="primary">#1565C0</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="primary_light">#90CAF9</color>
+    <color name="accent">#1976D2</color>
+
+    <!-- Şeker durumu -->
+    <color name="glucose_low">#EF5350</color>
+    <color name="glucose_normal">#66BB6A</color>
+    <color name="glucose_high">#FFA726</color>
+
+    <!-- İnsülin -->
+    <color name="insulin_done">#66BB6A</color>
+    <color name="insulin_pending">#BDBDBD</color>
+
+    <!-- Light mode -->
+    <color name="background">#F5F9FF</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="text_primary">#0C447C</color>
+    <color name="text_secondary">#378ADD</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Bottom nav -->
+    <color name="nav_selected">#1565C0</color>
+    <color name="nav_unselected">#9E9E9E</color>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Diyabet Takip Asistanı</string>
+    <string name="admob_app_id">ca-app-pub-7576500642676496~1560800778</string>
+    <string name="admob_banner_unit_id">ca-app-pub-7576500642676496/4298644759</string>
+    <string name="remove_ads_button">Reklamları Kaldır</string>
+    <string name="ads_status_free">Ücretsiz sürüm: reklamlar açık</string>
+    <string name="ads_status_removed">Premium: reklamlar kapalı</string>
+</resources>
