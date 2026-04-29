@@ -24,23 +24,46 @@ class GlucoseWidget : AppWidgetProvider() {
         }
     }
 
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: android.os.Bundle
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        updateAppWidget(context, appWidgetManager, appWidgetId)
+    }
+
     companion object {
         fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
             val views = RemoteViews(context.packageName, R.layout.widget_last_glucose)
+            val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+            val recordLimit = calculateRecordLimit(options)
 
             CoroutineScope(Dispatchers.IO).launch {
                 val db = AppDatabase.getInstance(context)
-                // TEK KAYIT YERİNE SON 3 KAYDI ÇEKİYORUZ
-                val records = db.glucoseDao().getLastThreeDirect()
+                val records = db.glucoseDao().getLastNDirect(recordLimit)
 
                 withContext(Dispatchers.Main) {
                     val sdf = SimpleDateFormat("dd.MM HH:mm", Locale.getDefault())
+                    views.setTextViewText(R.id.tvWidgetTitle, "Son $recordLimit Ölçüm")
 
                     // XML'deki yeni ID'leri dizilere alalım ki döngüyle basalım
-                    val valIds = arrayOf(R.id.tvVal1, R.id.tvVal2, R.id.tvVal3)
-                    val dateIds = arrayOf(R.id.tvDate1, R.id.tvDate2, R.id.tvDate3)
+                    val rowIds = arrayOf(
+                        R.id.layoutRecord1,
+                        R.id.layoutRecord2,
+                        R.id.layoutRecord3,
+                        R.id.layoutRecord4,
+                        R.id.layoutRecord5
+                    )
+                    val valIds = arrayOf(R.id.tvVal1, R.id.tvVal2, R.id.tvVal3, R.id.tvVal4, R.id.tvVal5)
+                    val dateIds = arrayOf(R.id.tvDate1, R.id.tvDate2, R.id.tvDate3, R.id.tvDate4, R.id.tvDate5)
 
-                    for (i in 0 until 3) {
+                    for (i in 0 until rowIds.size) {
+                        val shouldShowRow = i < recordLimit
+                        views.setViewVisibility(rowIds[i], if (shouldShowRow) View.VISIBLE else View.GONE)
+                        if (!shouldShowRow) continue
+
                         if (i < records.size) {
                             val record = records[i]
                             // Değeri String'e çevirerek basıyoruz (Hata almamak için kritik!)
@@ -60,6 +83,17 @@ class GlucoseWidget : AppWidgetProvider() {
                     }
                     appWidgetManager.updateAppWidget(appWidgetId, views)
                 }
+            }
+        }
+
+        private fun calculateRecordLimit(options: android.os.Bundle): Int {
+            val maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 120)
+            return when {
+                maxHeight < 110 -> 1
+                maxHeight < 170 -> 2
+                maxHeight < 230 -> 3
+                maxHeight < 300 -> 4
+                else -> 5
             }
         }
 

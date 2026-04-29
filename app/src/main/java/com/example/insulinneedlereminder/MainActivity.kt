@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,7 @@ import com.google.android.gms.ads.MobileAds
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val uiHandler = Handler(Looper.getMainLooper())
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { /* Permission result handled by system UI */ }
@@ -33,10 +36,13 @@ class MainActivity : AppCompatActivity() {
             prefs.edit().putBoolean("is_dark", systemDark).apply()
         }
         val isDark = prefs.getBoolean("is_dark", false)
-        if (isDark) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        val targetNightMode = if (isDark) {
+            AppCompatDelegate.MODE_NIGHT_YES
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+        if (AppCompatDelegate.getDefaultNightMode() != targetNightMode) {
+            AppCompatDelegate.setDefaultNightMode(targetNightMode)
         }
 
         super.onCreate(savedInstanceState)
@@ -69,10 +75,7 @@ class MainActivity : AppCompatActivity() {
             binding.bottomNavigationView.menu.findItem(destination.id)?.isChecked = true
         }
         setupAds()
-
-        // Exact alarm izni iste
-        requestExactAlarmPermission()
-        requestNotificationPermission()
+        deferPermissionPrompts()
     }
 
     private fun setupAds() {
@@ -83,7 +86,10 @@ class MainActivity : AppCompatActivity() {
     private fun requestExactAlarmPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-            if (!alarmManager.canScheduleExactAlarms()) {
+            val permissionPrefs = getSharedPreferences("permission_prefs", MODE_PRIVATE)
+            val prompted = permissionPrefs.getBoolean("exact_alarm_prompted", false)
+            if (!alarmManager.canScheduleExactAlarms() && !prompted) {
+                permissionPrefs.edit().putBoolean("exact_alarm_prompted", true).apply()
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
                 startActivity(intent)
             }
@@ -100,7 +106,16 @@ class MainActivity : AppCompatActivity() {
         notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
+    private fun deferPermissionPrompts() {
+        // İlk frame çizildikten sonra istemler açılırsa açılış daha akıcı olur.
+        uiHandler.postDelayed({
+            requestExactAlarmPermission()
+            requestNotificationPermission()
+        }, 450)
+    }
+
     override fun onDestroy() {
+        uiHandler.removeCallbacksAndMessages(null)
         binding.adViewBanner.destroy()
         super.onDestroy()
     }

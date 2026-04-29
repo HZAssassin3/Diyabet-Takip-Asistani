@@ -22,6 +22,7 @@ import com.example.insulinneedlereminder.util.DateUtils
 import com.example.insulinneedlereminder.util.GlucoseStatus
 import com.example.insulinneedlereminder.util.PrefsManager
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
 
@@ -52,6 +53,7 @@ class HomeFragment : Fragment() {
         setupDate()
         observeInsulin()
         observeGlucose()
+        observeWeeklySummary()
         setupButtons()
         setupDarkMode()
     }
@@ -130,6 +132,30 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun observeWeeklySummary() {
+        glucoseViewModel.allRecords.observe(viewLifecycleOwner) { records ->
+            val now = System.currentTimeMillis()
+            val sevenDaysAgo = now - TimeUnit.DAYS.toMillis(7)
+            val weeklyRecords = records.filter { it.date >= sevenDaysAgo }
+
+            if (weeklyRecords.isEmpty()) {
+                binding.tvWeeklyCount.text = "0"
+                binding.tvWeeklyAverage.text = "-"
+                binding.tvWeeklyMinMax.text = "-"
+                return@observe
+            }
+
+            val values = weeklyRecords.map { it.value }
+            val average = values.average().toInt()
+            val min = values.minOrNull() ?: 0
+            val max = values.maxOrNull() ?: 0
+
+            binding.tvWeeklyCount.text = weeklyRecords.size.toString()
+            binding.tvWeeklyAverage.text = "$average mg/dL"
+            binding.tvWeeklyMinMax.text = "$min - $max"
+        }
+    }
+
     private fun setupButtons() {
         binding.btnAddGlucose.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_glucose)
@@ -150,37 +176,16 @@ class HomeFragment : Fragment() {
             val newDark = !prefs.getBoolean("is_dark", false)
             prefs.edit().putBoolean("is_dark", newDark).apply()
 
-            // Animasyonlu geçiş
-            updateThemeButton(newDark)
+            // Ağır geçiş hissini azaltmak için toggle'ı anında güncelliyoruz.
+            updateThemeButtonInstant(newDark)
 
-            // Animasyon bittikten sonra temayı değiştir
-            binding.layoutThemeToggle.postDelayed({
-                if (newDark) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }, 350)
-        }
-    }
-
-    // Animasyonlu - sadece tıklamada kullan
-    private fun updateThemeButton(isDark: Boolean) {
-        binding.layoutThemeToggle.post {
-            val toggleWidth = binding.layoutThemeToggle.width.toFloat()
-            val circleWidth = binding.viewCircle.width.toFloat()
-            val moveDistance = toggleWidth - circleWidth - 6f
-
-            if (isDark) {
-                binding.layoutThemeToggle.setBackgroundResource(R.drawable.bg_toggle_night)
-                binding.tvMoon.text = "🌙"
-                binding.viewCircle.animate().translationX(0f).setDuration(300).start()
-                binding.tvMoon.animate().translationX(0f).setDuration(300).start()
+            val targetMode = if (newDark) {
+                AppCompatDelegate.MODE_NIGHT_YES
             } else {
-                binding.layoutThemeToggle.setBackgroundResource(R.drawable.bg_toggle_day)
-                binding.tvMoon.text = "☀️"
-                binding.viewCircle.animate().translationX(moveDistance).setDuration(300).start()
-                binding.tvMoon.animate().translationX(-moveDistance).setDuration(300).start()
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+            if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+                AppCompatDelegate.setDefaultNightMode(targetMode)
             }
         }
     }

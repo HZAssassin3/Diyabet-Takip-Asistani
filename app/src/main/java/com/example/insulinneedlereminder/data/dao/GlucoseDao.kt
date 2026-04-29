@@ -28,8 +28,8 @@ interface GlucoseDao {
     @Delete
     suspend fun delete(record: GlucoseRecord)
 
-    @Query("SELECT * FROM glucose_records ORDER BY id DESC LIMIT 3")
-    suspend fun getLastThreeDirect(): List<GlucoseRecord>
+    @Query("SELECT * FROM glucose_records ORDER BY date DESC LIMIT :limit")
+    suspend fun getLastNDirect(limit: Int): List<GlucoseRecord>
 
     @Query("SELECT * FROM glucose_records ORDER BY date DESC")
     suspend fun getAllDirect(): List<GlucoseRecord>
