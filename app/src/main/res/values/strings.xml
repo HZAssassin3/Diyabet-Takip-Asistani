@@ -12,7 +12,7 @@
 
     <string name="toolbar_glucose">Kan Şekeri</string>
     <string name="toolbar_insulin">İnsülin Kaydı</string>
-    <string name="toolbar_chart">Grafik</string>
+    <string name="toolbar_chart">Grafikler</string>
     <string name="toolbar_alarm_settings">Alarm Ayarları</string>
 
     <string name="home_date_placeholder">Pazartesi, 01.01.2025</string>
@@ -63,6 +63,7 @@
     <string name="alarm_save_all">Ayarları Kaydet ve Alarmları Kur</string>
     <string name="backup_export">Yedek Al</string>
     <string name="backup_import">Yedek Geri Yükle</string>
+    <string name="report_open">Gelişmiş Raporlar</string>
 
     <string name="delete">Sil</string>
     <string name="placeholder_time_morning">08:00</string>
@@ -76,4 +77,13 @@
     <string name="sample_datetime">01.01.2025 08:00</string>
     <string name="sample_units">10 ünite</string>
     <string name="widget_recent_measurements">Son 3 Ölçüm</string>
+    <string name="report_toolbar_title">Rapor</string>
+    <string name="report_glucose_summary">Kan Şekeri Özeti</string>
+    <string name="report_no_data">Henüz kayıt yok</string>
+    <string name="report_time_in_range">Hedef Aralık (70-180 mg/dL)</string>
+    <string name="report_insulin_summary">İnsülin Özeti</string>
+    <string name="report_export_title">PDF + CSV Rapor Oluştur</string>
+    <string name="report_weekly">Haftalık Rapor (Son 7 Gün)</string>
+    <string name="report_monthly">Aylık Rapor (Son 30 Gün)</string>
+    <string name="report_share_chooser">Raporları Paylaş veya Görüntüle</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Environment
 import com.example.insulinneedlereminder.data.entity.GlucoseRecord
 import com.example.insulinneedlereminder.data.entity.InsulinRecord
 import com.example.insulinneedlereminder.util.DateUtils
+import com.example.insulinneedlereminder.util.GlucoseStatus
 import com.itextpdf.io.font.constants.StandardFonts
 import com.itextpdf.kernel.colors.ColorConstants
 import com.itextpdf.kernel.font.PdfFontFactory
@@ -47,7 +48,7 @@ object PdfReportGenerator {
         )
 
         document.add(
-            Paragraph("Periyot: $period  •  Olusturma Tarihi: ${DateUtils.formatDate(System.currentTimeMillis())}")
+            Paragraph("Periyot: $period  •  Oluşturma Tarihi: ${DateUtils.formatDate(System.currentTimeMillis())}")
                 .setFontSize(11f)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setMarginBottom(20f)
@@ -55,13 +56,17 @@ object PdfReportGenerator {
 
         // KAN ŞEKERİ ÖZETİ VE TABLOSU
         if (glucoseRecords.isNotEmpty()) {
-            document.add(Paragraph("Kan Sekeri Ozeti").setFont(boldFont).setFontSize(14f))
+            document.add(Paragraph("Kan Şekeri Özeti").setFont(boldFont).setFontSize(14f))
 
             val values = glucoseRecords.map { it.value }
+            val low = glucoseRecords.count { GlucoseStatus.from(it.value) == GlucoseStatus.LOW }
+            val normal = glucoseRecords.count { GlucoseStatus.from(it.value) == GlucoseStatus.NORMAL }
+            val high = glucoseRecords.count { GlucoseStatus.from(it.value) == GlucoseStatus.HIGH }
+            val tirPercent = (normal * 100) / glucoseRecords.size
             val statsTable = Table(UnitValue.createPercentArray(floatArrayOf(1f, 1f, 1f, 1f)))
                 .useAllAvailableWidth().setMarginBottom(10f)
 
-            listOf("Ort", "Min", "Max", "Kayit").forEach {
+            listOf("Ort", "Min", "Maks", "Kayıt").forEach {
                 statsTable.addCell(Cell().add(Paragraph(it).setFont(boldFont)).setBackgroundColor(ColorConstants.LIGHT_GRAY))
             }
             statsTable.addCell("${values.average().toInt()} mg/dL")
@@ -70,16 +75,27 @@ object PdfReportGenerator {
             statsTable.addCell("${glucoseRecords.size}")
             document.add(statsTable)
 
+            val tirTable = Table(UnitValue.createPercentArray(floatArrayOf(2f, 1f, 1f, 1f)))
+                .useAllAvailableWidth().setMarginBottom(10f)
+            listOf("Hedef Aralık (70-180)", "Düşük", "Normal", "Yüksek").forEach {
+                tirTable.addCell(Cell().add(Paragraph(it).setFont(boldFont)).setBackgroundColor(ColorConstants.LIGHT_GRAY))
+            }
+            tirTable.addCell("%$tirPercent")
+            tirTable.addCell(low.toString())
+            tirTable.addCell(normal.toString())
+            tirTable.addCell(high.toString())
+            document.add(tirTable)
+
             // Detay Tablosu
             val glucoseTable = Table(UnitValue.createPercentArray(floatArrayOf(2f, 1f, 1f, 2f))).useAllAvailableWidth()
-            listOf("Tarih & Saat", "Deger", "Durum", "Not").forEach {
+            listOf("Tarih & Saat", "Değer", "Durum", "Not").forEach {
                 glucoseTable.addHeaderCell(Cell().add(Paragraph(it).setFont(boldFont)).setBackgroundColor(ColorConstants.LIGHT_GRAY))
             }
 
             glucoseRecords.forEach { record ->
                 glucoseTable.addCell(DateUtils.formatDateTime(record.date))
                 glucoseTable.addCell("${record.value} mg/dL")
-                val statusText = if (record.value < 70) "Dusuk" else if (record.value > 180) "Yuksek" else "Normal"
+                val statusText = if (record.value < 70) "Düşük" else if (record.value > 180) "Yüksek" else "Normal"
                 glucoseTable.addCell(statusText)
                 glucoseTable.addCell(record.note.ifEmpty { "-" })
             }
@@ -88,10 +104,26 @@ object PdfReportGenerator {
 
         // İNSÜLİN KAYITLARI TABLOSU
         if (insulinRecords.isNotEmpty()) {
-            document.add(Paragraph("Insulin Uygulama Kayitlari").setFont(boldFont).setFontSize(14f))
+            document.add(Paragraph("İnsülin Uygulama Kayıtları").setFont(boldFont).setFontSize(14f))
+            val insulinTotal = insulinRecords.sumOf { it.units }
+            val morningTotal = insulinRecords.filter { it.timeLabel.contains("Sabah", ignoreCase = true) }.sumOf { it.units }
+            val noonTotal = insulinRecords.filter { it.timeLabel.contains("Öğle", ignoreCase = true) || it.timeLabel.contains("Ogle", ignoreCase = true) }.sumOf { it.units }
+            val eveningTotal = insulinRecords.filter { it.timeLabel.contains("Akşam", ignoreCase = true) || it.timeLabel.contains("Aksam", ignoreCase = true) }.sumOf { it.units }
+
+            val insulinSummary = Table(UnitValue.createPercentArray(floatArrayOf(1f, 1f, 1f, 1f)))
+                .useAllAvailableWidth().setMarginBottom(10f)
+            listOf("Toplam", "Sabah", "Öğle", "Akşam").forEach {
+                insulinSummary.addCell(Cell().add(Paragraph(it).setFont(boldFont)).setBackgroundColor(ColorConstants.LIGHT_GRAY))
+            }
+            insulinSummary.addCell(insulinTotal.toString())
+            insulinSummary.addCell(morningTotal.toString())
+            insulinSummary.addCell(noonTotal.toString())
+            insulinSummary.addCell(eveningTotal.toString())
+            document.add(insulinSummary)
+
             val insulinTable = Table(UnitValue.createPercentArray(floatArrayOf(2f, 1f, 1f, 2f))).useAllAvailableWidth()
 
-            listOf("Tarih & Saat", "Ogun", "Unite", "Not").forEach {
+            listOf("Tarih & Saat", "Öğün", "Ünite", "Not").forEach {
                 insulinTable.addHeaderCell(Cell().add(Paragraph(it).setFont(boldFont)).setBackgroundColor(ColorConstants.LIGHT_GRAY))
             }
 
@@ -104,7 +136,7 @@ object PdfReportGenerator {
             document.add(insulinTable)
         }
 
-        document.add(Paragraph("\nBu rapor mobil uygulama tarafindan otomatik üretilmistir.")
+        document.add(Paragraph("\nBu rapor mobil uygulama tarafından otomatik üretilmiştir.")
             .setFontSize(9f).setTextAlignment(TextAlignment.CENTER).setFontColor(ColorConstants.GRAY))
 
         document.close()

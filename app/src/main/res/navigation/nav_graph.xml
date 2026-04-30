@@ -50,12 +50,22 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.insulinneedlereminder.ui.settings.SettingsFragment"
         android:label="Ayarlar"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settings_to_report"
+            app:destination="@id/reportFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.example.insulinneedlereminder.ui.history.HistoryFragment"
         android:label="Geçmiş Ölçümler"
         tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.example.insulinneedlereminder.ui.report.ReportFragment"
+        android:label="Rapor"
+        tools:layout="@layout/fragment_report" />
 
 </navigation>

@@ -282,6 +282,14 @@
                 android:text="@string/backup_import"
                 style="@style/Widget.App.Button.Outlined" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenReports"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height_primary"
+                android:layout_marginTop="@dimen/space_sm"
+                android:text="@string/report_open"
+                style="@style/Widget.App.Button.Outlined" />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

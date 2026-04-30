@@ -1,33 +1,22 @@
 package com.example.insulinneedlereminder.ui.history
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.insulinneedlereminder.data.db.AppDatabase
 import com.example.insulinneedlereminder.data.entity.GlucoseRecord
 import com.example.insulinneedlereminder.data.repository.GlucoseRepository
-import com.example.insulinneedlereminder.data.repository.InsulinRepository
 import com.example.insulinneedlereminder.databinding.FragmentHistoryBinding
 import com.example.insulinneedlereminder.ui.glucose.GlucoseAdapter
 import com.example.insulinneedlereminder.ui.glucose.GlucoseViewModel
 import com.example.insulinneedlereminder.ui.glucose.GlucoseViewModelFactory
-import com.example.insulinneedlereminder.ui.insulin.InsulinViewModel
-import com.example.insulinneedlereminder.ui.insulin.InsulinViewModelFactory
-import com.example.insulinneedlereminder.ui.report.PdfReportGenerator
 import com.example.insulinneedlereminder.ui.widget.GlucoseWidget
 import com.example.insulinneedlereminder.util.GlucoseStatus
 import com.example.insulinneedlereminder.util.PrefsManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HistoryFragment : Fragment() {
 
@@ -37,11 +26,6 @@ class HistoryFragment : Fragment() {
     private val viewModel: GlucoseViewModel by activityViewModels {
         val db = AppDatabase.getInstance(requireContext())
         GlucoseViewModelFactory(GlucoseRepository(db.glucoseDao()))
-    }
-
-    private val insulinViewModel: InsulinViewModel by activityViewModels {
-        val db = AppDatabase.getInstance(requireContext())
-        InsulinViewModelFactory(InsulinRepository(db.insulinDao()))
     }
 
     private lateinit var adapter: GlucoseAdapter
@@ -65,10 +49,6 @@ class HistoryFragment : Fragment() {
         setupRecyclerView()
         observeRecords()
         setupFilters()
-
-        binding.btnExportPdf.setOnClickListener {
-            exportToPdf()
-        }
     }
 
     private fun setupRecyclerView() {
@@ -106,41 +86,6 @@ class HistoryFragment : Fragment() {
             filteredRecords = allRecords.filter { viewModel.getStatus(it.value) == GlucoseStatus.HIGH }
             adapter.submitList(filteredRecords)
         }
-    }
-
-    private fun exportToPdf() {
-        val recordsToReport = if (filteredRecords.isNotEmpty()) filteredRecords else allRecords
-        val insulinRecords = insulinViewModel.allRecords.value ?: emptyList()
-
-        binding.progressBar.visibility = View.VISIBLE
-
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val context = context ?: return@launch
-                val file = PdfReportGenerator.generate(context, recordsToReport, insulinRecords, "Gecmis_Rapor")
-                withContext(Dispatchers.Main) {
-                    if (_binding == null) return@withContext
-                    binding.progressBar.visibility = View.GONE
-                    sharePdf(file)
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    if (_binding == null) return@withContext
-                    binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Hata: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun sharePdf(file: java.io.File) {
-        val uri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.provider", file)
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "application/pdf"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        startActivity(Intent.createChooser(intent, "Paylaş"))
     }
 
     override fun onDestroyView() {
