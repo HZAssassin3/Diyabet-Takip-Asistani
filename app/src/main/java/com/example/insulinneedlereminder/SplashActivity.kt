@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.AnimationUtils
+import androidx.core.app.ActivityOptionsCompat
 import androidx.appcompat.app.AppCompatActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -13,8 +14,12 @@ class SplashActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
     private val navigateRunnable = Runnable {
-        startActivity(Intent(this, MainActivity::class.java))
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        val options = ActivityOptionsCompat.makeCustomAnimation(
+            this,
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
+        startActivity(Intent(this, MainActivity::class.java), options.toBundle())
         finish()
     }
 
