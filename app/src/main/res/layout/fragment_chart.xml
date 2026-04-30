@@ -9,10 +9,9 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_toolbar"
-        app:title="Grafik"
-        app:titleTextColor="@color/white"
+        android:layout_height="@dimen/toolbar_height"
+        style="@style/Widget.App.Toolbar"
+        app:title="@string/toolbar_chart"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -29,31 +28,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/space_lg">
 
             <!-- Kan Şekeri Grafiği -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🩸 Kan Şekeri Grafiği"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="8dp" />
+                        android:text="@string/chart_glucose_title"
+                        android:layout_marginBottom="@dimen/space_sm"
+                        style="@style/TextAppearance.App.SectionTitle" />
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/glucoseChart"
@@ -67,25 +62,21 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📈 İstatistikler"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="12dp" />
+                        android:text="@string/chart_stats_title"
+                        android:layout_marginBottom="@dimen/space_md"
+                        style="@style/TextAppearance.App.SectionTitle" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -102,25 +93,21 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ortalama"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/chart_avg"
+                                style="@style/TextAppearance.App.Caption" />
 
                             <TextView
                                 android:id="@+id/tvAverage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="-"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary" />
+                                android:text="@string/placeholder_dash"
+                                style="@style/TextAppearance.App.Metric" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="mg/dL"
-                                android:textSize="11sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/glucose_unit"
+                                style="@style/TextAppearance.App.Caption" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -133,15 +120,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="En Düşük"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/chart_min"
+                                style="@style/TextAppearance.App.Caption" />
 
                             <TextView
                                 android:id="@+id/tvMin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="-"
+                                android:text="@string/placeholder_dash"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/glucose_low" />
@@ -149,9 +135,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="mg/dL"
-                                android:textSize="11sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/glucose_unit"
+                                style="@style/TextAppearance.App.Caption" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -164,15 +149,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="En Yüksek"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/chart_max"
+                                style="@style/TextAppearance.App.Caption" />
 
                             <TextView
                                 android:id="@+id/tvMax"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="-"
+                                android:text="@string/placeholder_dash"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/glucose_high" />
@@ -180,9 +164,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="mg/dL"
-                                android:textSize="11sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/glucose_unit"
+                                style="@style/TextAppearance.App.Caption" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -193,24 +176,20 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/card_background">
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="💉 İnsülin Grafiği"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="8dp" />
+                        android:text="@string/chart_insulin_title"
+                        android:layout_marginBottom="@dimen/space_sm"
+                        style="@style/TextAppearance.App.SectionTitle" />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/insulinChart"

@@ -14,46 +14,41 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_toolbar"
-            app:title="Alarm Ayarları"
-            app:titleTextColor="@color/white" />
+            android:layout_height="@dimen/toolbar_height"
+            style="@style/Widget.App.Toolbar"
+            app:title="@string/toolbar_alarm_settings" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/space_lg">
 
             <!-- Sabah Alarmı -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="@dimen/space_md">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="🌅 Sabah İğnesi"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
+                            android:text="@string/alarm_morning_title"
+                            style="@style/TextAppearance.App.SectionTitle" />
 
                         <Switch
                             android:id="@+id/switchMorning"
@@ -71,16 +66,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Alarm Saati"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary" />
+                            android:text="@string/alarm_time_label"
+                            style="@style/TextAppearance.App.Body" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnMorningTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="08:00"
-                            style="@style/Widget.Material3.Button.OutlinedButton" />
+                            android:text="@string/placeholder_time_morning"
+                            style="@style/Widget.App.Button.Outlined" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -92,18 +86,18 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Ünite"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary" />
+                            android:text="@string/alarm_unit_label"
+                            style="@style/TextAppearance.App.Body" />
 
                         <EditText
                             android:id="@+id/etMorningUnits"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:hint="0"
+                            android:hint="@string/placeholder_zero"
                             android:inputType="number"
                             android:maxLength="3"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:minHeight="@dimen/button_height_primary" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -112,31 +106,27 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="@dimen/space_md">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="☀️ Öğle İğnesi"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
+                            android:text="@string/alarm_noon_title"
+                            style="@style/TextAppearance.App.SectionTitle" />
 
                         <Switch
                             android:id="@+id/switchNoon"
@@ -154,16 +144,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Alarm Saati"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary" />
+                            android:text="@string/alarm_time_label"
+                            style="@style/TextAppearance.App.Body" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnNoonTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="12:00"
-                            style="@style/Widget.Material3.Button.OutlinedButton" />
+                            android:text="@string/placeholder_time_noon"
+                            style="@style/Widget.App.Button.Outlined" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -175,18 +164,18 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Ünite"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary" />
+                            android:text="@string/alarm_unit_label"
+                            style="@style/TextAppearance.App.Body" />
 
                         <EditText
                             android:id="@+id/etNoonUnits"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:hint="0"
+                            android:hint="@string/placeholder_zero"
                             android:inputType="number"
                             android:maxLength="3"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:minHeight="@dimen/button_height_primary" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -195,31 +184,27 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                        android:layout_marginBottom="@dimen/space_md">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="🌙 Akşam İğnesi"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
+                            android:text="@string/alarm_evening_title"
+                            style="@style/TextAppearance.App.SectionTitle" />
 
                         <Switch
                             android:id="@+id/switchEvening"
@@ -237,16 +222,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Alarm Saati"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary" />
+                            android:text="@string/alarm_time_label"
+                            style="@style/TextAppearance.App.Body" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnEveningTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="19:00"
-                            style="@style/Widget.Material3.Button.OutlinedButton" />
+                            android:text="@string/placeholder_time_evening"
+                            style="@style/Widget.App.Button.Outlined" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -258,18 +242,18 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Ünite"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary" />
+                            android:text="@string/alarm_unit_label"
+                            style="@style/TextAppearance.App.Body" />
 
                         <EditText
                             android:id="@+id/etEveningUnits"
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:hint="0"
+                            android:hint="@string/placeholder_zero"
                             android:inputType="number"
                             android:maxLength="3"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            android:minHeight="@dimen/button_height_primary" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -278,22 +262,25 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSaveSettings"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Ayarları Kaydet ve Alarmları Kur" />
+                android:layout_height="@dimen/button_height_primary"
+                android:text="@string/alarm_save_all"
+                style="@style/Widget.App.Button.Primary" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnExportBackup"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:text="Yedek Al" />
+                android:layout_height="@dimen/button_height_primary"
+                android:layout_marginTop="@dimen/space_md"
+                android:text="@string/backup_export"
+                style="@style/Widget.App.Button.Outlined" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnImportBackup"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="8dp"
-                android:text="Yedek Geri Yükle" />
+                android:layout_height="@dimen/button_height_primary"
+                android:layout_marginTop="@dimen/space_sm"
+                android:text="@string/backup_import"
+                style="@style/Widget.App.Button.Outlined" />
 
         </LinearLayout>
     </LinearLayout>

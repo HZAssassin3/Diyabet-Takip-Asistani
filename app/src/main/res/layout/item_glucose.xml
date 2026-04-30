@@ -4,10 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/card_background">
+    android:layout_marginBottom="@dimen/space_sm"
+    style="@style/Widget.App.Card">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="@dimen/space_md">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,8 +37,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="120 mg/dL"
-                    android:textSize="18sp"
+                    android:text="@string/sample_glucose_value"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
 
@@ -48,27 +46,24 @@
                     android:id="@+id/tvMealStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yemek Sonrası"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary" />
+                    android:text="@string/sample_after_meal"
+                    style="@style/TextAppearance.App.Caption" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tvDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="01.01.2025 08:00"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="4dp" />
+                android:text="@string/sample_datetime"
+                android:layout_marginTop="@dimen/space_xs"
+                style="@style/TextAppearance.App.Caption" />
 
             <TextView
                 android:id="@+id/tvNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/space_xs"
+                style="@style/TextAppearance.App.Caption"
                 android:visibility="gone" />
 
         </LinearLayout>
@@ -79,10 +74,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="8dp"
-            android:text="Sil"
+            android:layout_marginEnd="@dimen/space_sm"
+            android:text="@string/delete"
             android:textSize="12sp"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            style="@style/Widget.App.Button.Outlined" />
 
     </LinearLayout>
 

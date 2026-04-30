@@ -4,26 +4,26 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_widget"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="@dimen/space_md">
 
     <TextView
         android:id="@+id/tvWidgetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Son 3 Ölçüm"
+        android:text="@string/widget_recent_measurements"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="@dimen/space_sm"/>
 
     <LinearLayout
         android:id="@+id/layoutRecord1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="4dp">
-        <TextView android:id="@+id/tvVal1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="--"/>
-        <TextView android:id="@+id/tvDate1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#DDDDDD" android:textSize="10sp" android:text="--"/>
+        android:layout_marginBottom="@dimen/space_xs">
+        <TextView android:id="@+id/tvVal1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="@string/placeholder_double_dash"/>
+        <TextView android:id="@+id/tvDate1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/widget_subtle_text" android:textSize="11sp" android:text="@string/placeholder_double_dash"/>
     </LinearLayout>
 
     <LinearLayout
@@ -31,9 +31,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="4dp">
-        <TextView android:id="@+id/tvVal2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="--"/>
-        <TextView android:id="@+id/tvDate2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#DDDDDD" android:textSize="10sp" android:text="--"/>
+        android:layout_marginBottom="@dimen/space_xs">
+        <TextView android:id="@+id/tvVal2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="@string/placeholder_double_dash"/>
+        <TextView android:id="@+id/tvDate2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/widget_subtle_text" android:textSize="11sp" android:text="@string/placeholder_double_dash"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,9 +41,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="4dp">
-        <TextView android:id="@+id/tvVal3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="--"/>
-        <TextView android:id="@+id/tvDate3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#DDDDDD" android:textSize="10sp" android:text="--"/>
+        android:layout_marginBottom="@dimen/space_xs">
+        <TextView android:id="@+id/tvVal3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="@string/placeholder_double_dash"/>
+        <TextView android:id="@+id/tvDate3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/widget_subtle_text" android:textSize="11sp" android:text="@string/placeholder_double_dash"/>
     </LinearLayout>
 
     <LinearLayout
@@ -51,10 +51,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="@dimen/space_xs"
         android:visibility="gone">
-        <TextView android:id="@+id/tvVal4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="--"/>
-        <TextView android:id="@+id/tvDate4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#DDDDDD" android:textSize="10sp" android:text="--"/>
+        <TextView android:id="@+id/tvVal4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="@string/placeholder_double_dash"/>
+        <TextView android:id="@+id/tvDate4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/widget_subtle_text" android:textSize="11sp" android:text="@string/placeholder_double_dash"/>
     </LinearLayout>
 
     <LinearLayout
@@ -63,8 +63,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:visibility="gone">
-        <TextView android:id="@+id/tvVal5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="--"/>
-        <TextView android:id="@+id/tvDate5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#DDDDDD" android:textSize="10sp" android:text="--"/>
+        <TextView android:id="@+id/tvVal5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:textColor="@color/white" android:textStyle="bold" android:text="@string/placeholder_double_dash"/>
+        <TextView android:id="@+id/tvDate5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/widget_subtle_text" android:textSize="11sp" android:text="@string/placeholder_double_dash"/>
     </LinearLayout>
 
 </LinearLayout>

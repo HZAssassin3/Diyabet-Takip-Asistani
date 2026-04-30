@@ -4,16 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/card_background">
+    android:layout_marginBottom="@dimen/space_sm"
+    style="@style/Widget.App.Card">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="@dimen/space_md"
         android:gravity="center_vertical">
 
         <!-- Checkbox -->
@@ -21,7 +19,7 @@
             android:id="@+id/cbDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp" />
+            android:layout_marginEnd="@dimen/space_md" />
 
         <!-- İçerik -->
         <LinearLayout
@@ -40,18 +38,16 @@
                     android:id="@+id/tvTimeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sabah"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
+                    android:text="@string/time_morning"
+                    style="@style/TextAppearance.App.SectionTitle" />
 
                 <!-- Ünite badge -->
                 <TextView
                     android:id="@+id/tvUnits"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="10 ünite"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:text="@string/sample_units"
                     android:textSize="12sp"
                     android:textColor="@color/white"
                     android:background="@drawable/bg_badge"
@@ -64,18 +60,16 @@
                 android:id="@+id/tvDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="01.01.2025 08:00"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="4dp" />
+                android:text="@string/sample_datetime"
+                android:layout_marginTop="@dimen/space_xs"
+                style="@style/TextAppearance.App.Caption" />
 
             <TextView
                 android:id="@+id/tvNote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"
                 android:layout_marginTop="2dp"
+                style="@style/TextAppearance.App.Caption"
                 android:visibility="gone" />
 
         </LinearLayout>
@@ -85,9 +79,9 @@
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sil"
+            android:text="@string/delete"
             android:textSize="12sp"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            style="@style/Widget.App.Button.Outlined" />
 
     </LinearLayout>
 

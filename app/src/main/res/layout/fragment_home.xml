@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_toolbar"
             android:orientation="vertical"
-            android:padding="20dp"
-            android:paddingBottom="30dp">
+            android:padding="@dimen/space_xl"
+            android:paddingBottom="@dimen/space_xxl">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,9 +30,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Pazartesi, 01.01.2025"
-                    android:textColor="#CCFFFFFF"
-                    android:textSize="13sp" />
+                    android:text="@string/home_date_placeholder"
+                    android:textColor="@color/toolbar_title"
+                    style="@style/TextAppearance.App.Body" />
 
                 <!-- Tema Switcher -->
                 <FrameLayout
@@ -46,7 +46,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="🌙"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="6dp"/>
 
@@ -66,46 +66,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_marginTop="-16dp">
+            android:padding="@dimen/space_lg">
 
             <!-- İnsülin Kartı -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
+                            android:layout_marginBottom="@dimen/space_md">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="💉 İnsülin Takibi"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
+                            android:text="@string/home_insulin_tracking"
+                            style="@style/TextAppearance.App.SectionTitle" />
 
                         <TextView
                             android:id="@+id/tvInsulinStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 / 0"
-                            android:textSize="14sp"
-                            android:textColor="@color/primary" />
+                            android:text="@string/home_insulin_status_placeholder"
+                            style="@style/TextAppearance.App.Body" />
                     </LinearLayout>
 
                     <!-- Sabah / Öğle / Akşam -->
@@ -120,9 +114,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="6dp"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp"
-                            app:cardBackgroundColor="@color/background">
+                            style="@style/Widget.App.Card.Subtle">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -139,16 +131,14 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Sabah"
-                                    android:textSize="11sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/text_primary"
-                                    android:layout_marginTop="2dp" />
+                                    android:text="@string/time_morning"
+                                    android:layout_marginTop="2dp"
+                                    style="@style/TextAppearance.App.Caption" />
                                 <TextView
                                     android:id="@+id/ivMorningCheck"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="✓"
+                                    android:text="@string/status_done"
                                     android:textSize="16sp"
                                     android:textColor="@color/insulin_done"
                                     android:layout_marginTop="2dp"
@@ -157,7 +147,7 @@
                                     android:id="@+id/tvMorningPending"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="○"
+                                    android:text="@string/status_pending"
                                     android:textSize="16sp"
                                     android:textColor="@color/insulin_pending"
                                     android:layout_marginTop="2dp" />
@@ -169,9 +159,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="6dp"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp"
-                            app:cardBackgroundColor="@color/background">
+                            style="@style/Widget.App.Card.Subtle">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -188,16 +176,14 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Öğle"
-                                    android:textSize="11sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/text_primary"
+                                    android:text="@string/time_noon"
+                                    style="@style/TextAppearance.App.Caption"
                                     android:layout_marginTop="2dp" />
                                 <TextView
                                     android:id="@+id/ivNoonCheck"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="✓"
+                                    android:text="@string/status_done"
                                     android:textSize="16sp"
                                     android:textColor="@color/insulin_done"
                                     android:layout_marginTop="2dp"
@@ -206,7 +192,7 @@
                                     android:id="@+id/tvNoonPending"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="○"
+                                    android:text="@string/status_pending"
                                     android:textSize="16sp"
                                     android:textColor="@color/insulin_pending"
                                     android:layout_marginTop="2dp" />
@@ -217,9 +203,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp"
-                            app:cardBackgroundColor="@color/background">
+                            style="@style/Widget.App.Card.Subtle">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -236,16 +220,14 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Akşam"
-                                    android:textSize="11sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/text_primary"
+                                    android:text="@string/time_evening"
+                                    style="@style/TextAppearance.App.Caption"
                                     android:layout_marginTop="2dp" />
                                 <TextView
                                     android:id="@+id/ivEveningCheck"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="✓"
+                                    android:text="@string/status_done"
                                     android:textSize="16sp"
                                     android:textColor="@color/insulin_done"
                                     android:layout_marginTop="2dp"
@@ -254,7 +236,7 @@
                                     android:id="@+id/tvEveningPending"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="○"
+                                    android:text="@string/status_pending"
                                     android:textSize="16sp"
                                     android:textColor="@color/insulin_pending"
                                     android:layout_marginTop="2dp" />
@@ -269,33 +251,28 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="🩸 Son Kan Şekeri"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="8dp" />
+                        android:text="@string/home_last_glucose"
+                        android:layout_marginBottom="@dimen/space_sm"
+                        style="@style/TextAppearance.App.SectionTitle" />
 
                     <TextView
                         android:id="@+id/tvLastGlucose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bugün ölçüm yapılmadı"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_secondary" />
+                        android:text="@string/home_no_measurement_today"
+                        style="@style/TextAppearance.App.Body" />
 
                     <TextView
                         android:id="@+id/tvGlucoseWarning"
@@ -312,25 +289,21 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="@color/card_background">
+                android:layout_marginBottom="@dimen/space_lg"
+                style="@style/Widget.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="@dimen/space_lg">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📊 Haftalık Özet (7 Gün)"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="12dp" />
+                        android:text="@string/home_weekly_summary"
+                        android:layout_marginBottom="@dimen/space_md"
+                        style="@style/TextAppearance.App.SectionTitle" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -347,18 +320,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ölçüm"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/home_measurement"
+                                style="@style/TextAppearance.App.Caption" />
 
                             <TextView
                                 android:id="@+id/tvWeeklyCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary" />
+                                android:text="@string/placeholder_zero"
+                                style="@style/TextAppearance.App.Metric" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -371,18 +341,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ortalama"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/home_average"
+                                style="@style/TextAppearance.App.Caption" />
 
                             <TextView
                                 android:id="@+id/tvWeeklyAverage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="-"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary" />
+                                android:text="@string/placeholder_dash"
+                                style="@style/TextAppearance.App.Metric" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -395,18 +362,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Min-Maks"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:text="@string/home_min_max"
+                                style="@style/TextAppearance.App.Caption" />
 
                             <TextView
                                 android:id="@+id/tvWeeklyMinMax"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="-"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/text_primary" />
+                                android:text="@string/placeholder_dash"
+                                style="@style/TextAppearance.App.Body" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -421,12 +385,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddGlucose"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/button_height_primary"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="@dimen/space_sm"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="Ölçüm Ekle"
+                    android:text="@string/home_add_measurement"
                     app:icon="@drawable/ic_glucose"
                     app:iconGravity="textStart"
                     app:iconPadding="6dp"
@@ -434,17 +398,18 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeMinTextSize="10sp"
                     app:autoSizeMaxTextSize="14sp"
-                    app:autoSizeStepGranularity="1sp" />
+                    app:autoSizeStepGranularity="1sp"
+                    style="@style/Widget.App.Button.Primary" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddInsulin"
                     android:layout_width="0dp"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/button_height_primary"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/space_sm"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="İğne Ekle"
+                    android:text="@string/home_add_injection"
                     app:icon="@drawable/ic_insulin"
                     app:iconGravity="textStart"
                     app:iconPadding="6dp"
@@ -453,7 +418,7 @@
                     app:autoSizeMinTextSize="10sp"
                     app:autoSizeMaxTextSize="14sp"
                     app:autoSizeStepGranularity="1sp"
-                    style="@style/Widget.Material3.Button.OutlinedButton" />
+                    style="@style/Widget.App.Button.Outlined" />
 
             </LinearLayout>
 

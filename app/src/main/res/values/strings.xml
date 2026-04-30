@@ -3,4 +3,77 @@
     <string name="splash_hint">Şekerini birlikte daha dengeli yönetelim</string>
     <string name="admob_app_id">ca-app-pub-7576500642676496~1560800778</string>
     <string name="admob_banner_unit_id">ca-app-pub-7576500642676496/4298644759</string>
+
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_glucose">Kan Şekeri</string>
+    <string name="nav_insulin">İnsülin</string>
+    <string name="nav_chart">Grafik</string>
+    <string name="nav_alarms">Alarmlar</string>
+
+    <string name="toolbar_glucose">Kan Şekeri</string>
+    <string name="toolbar_insulin">İnsülin Kaydı</string>
+    <string name="toolbar_chart">Grafik</string>
+    <string name="toolbar_alarm_settings">Alarm Ayarları</string>
+
+    <string name="home_date_placeholder">Pazartesi, 01.01.2025</string>
+    <string name="home_insulin_tracking">İnsülin Takibi</string>
+    <string name="home_insulin_status_placeholder">0 / 0</string>
+    <string name="home_last_glucose">Son Kan Şekeri</string>
+    <string name="home_no_measurement_today">Bugün ölçüm yapılmadı</string>
+    <string name="home_weekly_summary">Haftalık Özet (7 Gün)</string>
+    <string name="home_measurement">Ölçüm</string>
+    <string name="home_average">Ortalama</string>
+    <string name="home_min_max">Min-Maks</string>
+    <string name="home_add_measurement">Ölçüm Ekle</string>
+    <string name="home_add_injection">İğne Ekle</string>
+
+    <string name="time_morning">Sabah</string>
+    <string name="time_noon">Öğle</string>
+    <string name="time_evening">Akşam</string>
+    <string name="status_done">✓</string>
+    <string name="status_pending">○</string>
+
+    <string name="glucose_new_measurement">Yeni Ölçüm</string>
+    <string name="glucose_value_hint">Kan şekeri değeri (mg/dL)</string>
+    <string name="glucose_measurement_time">Ölçüm Zamanı</string>
+    <string name="glucose_before_meal">Yemek Öncesi</string>
+    <string name="glucose_after_meal">Yemek Sonrası</string>
+    <string name="glucose_note_hint">Not (isteğe bağlı)</string>
+    <string name="save">Kaydet</string>
+    <string name="glucose_recent_measurements">Son Ölçümler</string>
+    <string name="view_all">Tümünü Gör</string>
+    <string name="glucose_no_records">Henüz ölçüm kaydı yok</string>
+    <string name="glucose_unit">mg/dL</string>
+
+    <string name="insulin_no_records">Henüz iğne kaydı yok</string>
+    <string name="insulin_add">İnsülin Ekle</string>
+
+    <string name="chart_glucose_title">Kan Şekeri Grafiği</string>
+    <string name="chart_stats_title">İstatistikler</string>
+    <string name="chart_avg">Ortalama</string>
+    <string name="chart_min">En Düşük</string>
+    <string name="chart_max">En Yüksek</string>
+    <string name="chart_insulin_title">İnsülin Grafiği</string>
+
+    <string name="alarm_morning_title">Sabah İğnesi</string>
+    <string name="alarm_noon_title">Öğle İğnesi</string>
+    <string name="alarm_evening_title">Akşam İğnesi</string>
+    <string name="alarm_time_label">Alarm Saati</string>
+    <string name="alarm_unit_label">Ünite</string>
+    <string name="alarm_save_all">Ayarları Kaydet ve Alarmları Kur</string>
+    <string name="backup_export">Yedek Al</string>
+    <string name="backup_import">Yedek Geri Yükle</string>
+
+    <string name="delete">Sil</string>
+    <string name="placeholder_time_morning">08:00</string>
+    <string name="placeholder_time_noon">12:00</string>
+    <string name="placeholder_time_evening">19:00</string>
+    <string name="placeholder_zero">0</string>
+    <string name="placeholder_dash">-</string>
+    <string name="placeholder_double_dash">--</string>
+    <string name="sample_glucose_value">120 mg/dL</string>
+    <string name="sample_after_meal">Yemek Sonrası</string>
+    <string name="sample_datetime">01.01.2025 08:00</string>
+    <string name="sample_units">10 ünite</string>
+    <string name="widget_recent_measurements">Son 3 Ölçüm</string>
 </resources>

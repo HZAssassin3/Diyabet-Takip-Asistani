@@ -3,21 +3,21 @@
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_home"
-        android:title="Ana Sayfa" />
+        android:title="@string/nav_home" />
     <item
         android:id="@+id/glucoseFragment"
         android:icon="@drawable/ic_glucose"
-        android:title="Kan Şekeri" />
+        android:title="@string/nav_glucose" />
     <item
         android:id="@+id/insulinFragment"
         android:icon="@drawable/ic_insulin"
-        android:title="İnsülin" />
+        android:title="@string/nav_insulin" />
     <item
         android:id="@+id/chartFragment"
         android:icon="@drawable/ic_chart"
-        android:title="Grafik" />
+        android:title="@string/nav_chart" />
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_alarm"
-        android:title="Alarmlar" />
+        android:title="@string/nav_alarms" />
 </menu>

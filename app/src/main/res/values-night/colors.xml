@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Ana renkler -->
+    <!-- Brand -->
     <color name="primary">#1976D2</color>
     <color name="primary_dark">#1565C0</color>
     <color name="primary_light">#64B5F6</color>
     <color name="accent">#90CAF9</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <!-- Surface roles -->
+    <color name="background">#1C1C1E</color>
+    <color name="surface">#2C2C2E</color>
+    <color name="surface_variant">#34343A</color>
+    <color name="outline">#4D647B</color>
+    <color name="text_primary">#CFE6FF</color>
+    <color name="text_secondary">#9CC6F0</color>
+    <color name="on_surface">#CFE6FF</color>
+    <color name="on_surface_variant">#9CC6F0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="toolbar_title">#E6FFFFFF</color>
+    <color name="widget_subtle_text">#DDDDDD</color>
 
     <!-- Şeker durumu -->
     <color name="glucose_low">#EF9A9A</color>
@@ -14,13 +28,7 @@
     <!-- İnsülin -->
     <color name="insulin_done">#81C784</color>
     <color name="insulin_pending">#616161</color>
-
-    <!-- Dark mode -->
-    <color name="background">#1C1C1E</color>
-    <color name="card_background">#2C2C2E</color>
-    <color name="text_primary">#90CAF9</color>
-    <color name="text_secondary">#64B5F6</color>
-    <color name="white">#FFFFFF</color>
+    <color name="card_background">@color/surface</color>
 
     <!-- Bottom nav -->
     <color name="nav_selected">#1976D2</color>
